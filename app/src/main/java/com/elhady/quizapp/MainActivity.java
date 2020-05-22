@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -12,131 +13,94 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    Button submit;
+    int correctAnswers = 0;
 
-    private ScrollView scroll;
-    private RadioGroup radioGroupOne, radioGroupTwo, radioGroupThree, radioGroupFour, radioGroupFive;
-    private RadioButton question1, question2, question3, question4, question7;
-    private CheckBox question8_1, question8_2, question8_4, wrongAnswerEight;
-    private EditText question5, question6;
-    private int correctAnswers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        scroll = (ScrollView) findViewById(R.id.Scroll);
-
-        question1 = (RadioButton) findViewById(R.id.rb_CorrectAnswerOne);
-        question2 = (RadioButton) findViewById(R.id.rb_CorrectAnswerTwo);
-        question3 = (RadioButton) findViewById(R.id.rb_CorrectAnswerThree);
-        question4 = (RadioButton) findViewById(R.id.rb_CorrectAnswerFour);
-        question5 = (EditText) findViewById(R.id.userResponse_AnswerFive);
-        question6 = (EditText) findViewById(R.id.userResponse_AnswerSix);
-        question7 = (RadioButton) findViewById(R.id.rb_CorrectAnswerSeven);
-        question8_1 = (CheckBox) findViewById(R.id.cb_CorrectAnswerEight_1);
-        question8_2 = (CheckBox) findViewById(R.id.cb_CorrectAnswerEight_2);
-        question8_4 = (CheckBox) findViewById(R.id.cb_CorrectAnswerEight_3);
-
-        wrongAnswerEight = (CheckBox) findViewById(R.id.cb_WrongAnswerEight);
-        radioGroupOne = (RadioGroup) findViewById(R.id.radioGroupOne);
-        radioGroupTwo = (RadioGroup) findViewById(R.id.radioGroupTwo);
-        radioGroupThree = (RadioGroup) findViewById(R.id.radioGroupThree);
-        radioGroupFour = (RadioGroup) findViewById(R.id.radioGroupFour);
-        radioGroupFive = (RadioGroup) findViewById(R.id.radioGroupFive);
-
+        submit = (Button) findViewById(R.id.submitButton);
+        submit.setOnClickListener(submitButtonOnClickListener);
     }
 
-    public void SubmitResponse(View v) {
+    private void checkQuestionOneAnswers(){
+        CheckBox questionOneMario = findViewById(R.id.checkboxQuest1AnswerMario);
+        CheckBox questionOneDonkey = findViewById(R.id.checkboxQuest1AnswerDonkey);
+        CheckBox questionOnePortal =  findViewById(R.id.checkboxQuest1AnswerPortal);
+        boolean isQuestionOneMarioChecked = questionOneMario.isChecked();
+        boolean isQuestionOneDonkeyChecked = questionOneDonkey.isChecked();
+        boolean isQuestionOnePortalChecked = questionOnePortal.isChecked();
 
-        String answerFive = getResources().getString(R.string.AnswerFive);
-        String answerSix = getResources().getString(R.string.AnswerSix);
-        String wrongAnswers = "Check :";
-        if (question1.isChecked()) {
-            correctAnswers++;
-        } else {
-            wrongAnswers = wrongAnswers + "Q1\n";
+        if (isQuestionOneMarioChecked && isQuestionOneDonkeyChecked && !isQuestionOnePortalChecked){
+            correctAnswers += 1;
         }
-        if (question2.isChecked()) {
-            correctAnswers++;
-        } else {
-            wrongAnswers = wrongAnswers + "Q2\n";
-        }
-        if (question3.isChecked()) {
-            correctAnswers++;
-        } else {
-            wrongAnswers = wrongAnswers + "Q3\n";
-        }
-
-        if (question4.isChecked()) {
-            correctAnswers++;
-        } else {
-            wrongAnswers = wrongAnswers + "Q4\n";
-        }
-
-        if (answerFive.equals(question5.getText().toString())) {
-            correctAnswers++;
-        } else {
-            wrongAnswers = wrongAnswers + "Q5\n";
-        }
-
-        if (answerSix.equals(question6.getText().toString())) {
-            correctAnswers++;
-        } else {
-            wrongAnswers = wrongAnswers + "Q6\n";
-        }
-
-        if (question7.isChecked()) {
-            correctAnswers++;
-        } else {
-            wrongAnswers = wrongAnswers + "Q7\n";
-        }
-
-        if (question8_1.isChecked() && question8_2.isChecked() && question8_4.isChecked() && !(wrongAnswerEight.isChecked())) {
-            correctAnswers++;
-        } else {
-            wrongAnswers = wrongAnswers + "Q8\n";
-        }
-
-
-        if (correctAnswers == 8) {
-            Toast.makeText(this, "Congrats, All Answers Correct", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Correct Answers: " + correctAnswers + " /8\n" + wrongAnswers, Toast.LENGTH_LONG).show();
-        }
-
-//        ResetQuiz(findViewById(R.id.all));
     }
 
-    public void ResetQuiz(View v) {
+    private void checkQuestionTwoAnswers(){
+        RadioButton radioButton1989 = (RadioButton) findViewById(R.id.radio_1989);
+        boolean isQuestionTwo1989Checked = radioButton1989.isChecked();
+        if (isQuestionTwo1989Checked){
+            correctAnswers += 1;
+        }
+    }
 
+    private String getQuestionThreeUserInput() {
+        EditText userInputLastName = (EditText) findViewById(R.id.answerInputUserLastName);
+        String name = userInputLastName.getText().toString();
+        return name;
+    }
+
+    private void checkQuestionThreeAnswer(){
+        String name = getQuestionThreeUserInput();
+        if (name.trim().equalsIgnoreCase("croft")){
+            correctAnswers += 1;
+        }
+    }
+
+    private void checkQuestionFourAnswers(){
+        RadioButton radioButtonPortal = (RadioButton) findViewById(R.id.radio_portal);
+        boolean isQuestionTwoPortalChecked = radioButtonPortal.isChecked();
+        if (isQuestionTwoPortalChecked){
+            correctAnswers += 1;
+        }
+    }
+
+    private void checkQuestionFiveAnswers(){
+        CheckBox questionFiveGameBoy = (CheckBox) findViewById(R.id.checkboxQuest5GameBoy);
+        CheckBox questionFivePSP = (CheckBox) findViewById(R.id.checkboxQuestPSP);
+        CheckBox questionFiveWii = (CheckBox) findViewById(R.id.checkboxQuest5Wii);
+        boolean isQuestionFiveGameBoyChecked = questionFiveGameBoy.isChecked();
+        boolean isQuestionFivePSPChecked = questionFivePSP.isChecked();
+        boolean isQuestionFiveWiiChecked = questionFiveWii.isChecked();
+
+        if (isQuestionFiveGameBoyChecked && !isQuestionFivePSPChecked && isQuestionFiveWiiChecked){
+            correctAnswers += 1;
+        }
+    }
+
+    private void checkAllQuestions(){
+        checkQuestionOneAnswers();
+        checkQuestionTwoAnswers();
+        checkQuestionThreeAnswer();
+        checkQuestionFourAnswers();
+        checkQuestionFiveAnswers();
+    }
+
+    private void resetCounterCorrectAnswers(){
         correctAnswers = 0;
-
-        question5.getText().clear();
-        question6.getText().clear();
-
-        radioGroupOne.clearCheck();
-        radioGroupTwo.clearCheck();
-        radioGroupThree.clearCheck();
-        radioGroupFour.clearCheck();
-        radioGroupFive.clearCheck();
-
-        if (question8_1.isChecked()) {
-            question8_1.toggle();
-        }
-
-        if (question8_2.isChecked()) {
-            question8_2.toggle();
-        }
-
-        if (question8_4.isChecked()) {
-            question8_4.toggle();
-        }
-
-        if (wrongAnswerEight.isChecked()) {
-            wrongAnswerEight.toggle();
-        }
-
-        scroll.fullScroll(ScrollView.FOCUS_UP);
     }
+
+    final View.OnClickListener submitButtonOnClickListener = new View.OnClickListener() {
+        public void onClick(final View v){
+            checkAllQuestions();
+            Toast.makeText(MainActivity.this, "Correct Answers: " + correctAnswers + "/5",
+                    Toast.LENGTH_LONG).show();
+            resetCounterCorrectAnswers();
+        }
+    };
+
+
 }
